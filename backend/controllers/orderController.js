@@ -51,4 +51,4 @@ const trackOrder = async (req, res) => {
   res.json({ success: true, order: formatOrder(order) });
 };
 
-module.exports = { createOrder, trackOrder, statuses };
+module.exports = { createOrder, trackOrder };
