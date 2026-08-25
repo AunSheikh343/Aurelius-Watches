@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { API_URL } from "../api";
+import { API_URL, readApiResponse } from "../api";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -21,11 +21,7 @@ export default function Login() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Invalid email or password.");
-      }
+      const data = await readApiResponse(response, "Invalid email or password.");
 
       localStorage.setItem("aurelius-token", data.token);
       localStorage.setItem("aurelius-user", JSON.stringify(data.user));

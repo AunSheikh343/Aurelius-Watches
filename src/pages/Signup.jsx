@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { API_URL } from "../api";
+import { API_URL, readApiResponse } from "../api";
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -23,11 +23,7 @@ export default function Signup() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Unable to create your account.");
-      }
+      await readApiResponse(response, "Unable to create your account.");
 
       navigate("/login", { state: { message: "Account created successfully. Please log in." } });
     } catch (requestError) {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { API_URL } from "../api";
+import { API_URL, readApiResponse } from "../api";
 import "./TrackOrder.css";
 
 const statuses = ["Order Placed", "Order Confirmed", "Processing", "Shipped", "Out for Delivery", "Delivered"];
@@ -38,8 +38,7 @@ export default function TrackOrder() {
       const response = await fetch(`${API_URL}/api/orders/track/${encodeURIComponent(cleanId)}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      const data = await response.json();
-      if (!response.ok) throw new Error(response.status === 404 ? "Order not found. Please check your Order ID and try again." : data.message);
+      const data = await readApiResponse(response, response.status === 404 ? "Order not found. Please check your Order ID and try again." : "Unable to load this order.");
       setOrder(data.order);
     } catch (error) {
       setMessage(error.message || "We could not reach order tracking. Please try again.");

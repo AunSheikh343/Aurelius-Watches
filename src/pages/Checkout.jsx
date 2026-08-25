@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { API_URL } from "../api";
+import { API_URL, readApiResponse } from "../api";
 
 const money = value => `$${value.toFixed(2)}`;
 
@@ -77,8 +77,7 @@ export default function Checkout({ cart, clearCart }) {
           shippingAddress: { address: form.get("address"), city: form.get("city"), postalCode: form.get("postalCode"), country: "Pakistan" },
         }),
       });
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.message || "Unable to place your order.");
+      const data = await readApiResponse(response, "Unable to place your order.");
 
       clearCart();
       navigate(`/track-order?orderId=${encodeURIComponent(data.order.orderId)}`);
