@@ -17,7 +17,6 @@ export default function Header({ cartCount }) {
         <nav className={open ? "nav open" : "nav"}>
           <NavLink to="/" end>Home</NavLink>
           <NavLink to="/shop">Shop</NavLink>
-          <NavLink to="/products">Products</NavLink>
           <NavLink to="/about">About</NavLink>
           <NavLink to="/blogs">Blogs</NavLink>
           <NavLink to="/contact">Contact</NavLink>
@@ -25,6 +24,9 @@ export default function Header({ cartCount }) {
 
         <div className="nav-actions">
           <button aria-label="Search" onClick={() => alert("Search is ready to connect to your backend.")}>⌕</button>
+          <Link aria-label="Log in or sign up" className="account-icon" title="Log in or sign up" to={localStorage.getItem("aurelius-token") ? "/home" : "/login"}>
+            ♙
+          </Link>
           <Link aria-label="Cart" className="cart-icon" to="/cart">
             🛒<b>{cartCount}</b>
           </Link>

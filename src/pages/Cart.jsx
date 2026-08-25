@@ -1,11 +1,22 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const money = (n) => `$${n.toFixed(2)}`;
 
-export default function Cart({ cart, updateQty, removeFromCart }) {
+export default function Cart({ cart, updateQty, removeFromCart, clearCart }) {
+  const navigate = useNavigate();
   const subtotal = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
   const shipping = subtotal === 0 || subtotal >= 100 ? 0 : 12;
+  const checkout = () => {
+    const order = {
+      number: `AW-${Date.now().toString().slice(-8)}`,
+      itemCount: cart.reduce((sum, item) => sum + item.qty, 0),
+      total: subtotal + shipping,
+    };
+
+    clearCart();
+    navigate("/thank-you", { state: { order } });
+  };
 
   if (cart.length === 0) {
     return (
@@ -68,7 +79,7 @@ export default function Cart({ cart, updateQty, removeFromCart }) {
             <div><span>Shipping</span><strong>{shipping === 0 ? "FREE" : money(shipping)}</strong></div>
             <hr/>
             <div className="total"><span>Total</span><strong>{money(subtotal + shipping)}</strong></div>
-            <button className="btn dark wide" onClick={() => alert("Checkout is ready to connect to your payment/backend system.")}>
+            <button className="btn dark wide" onClick={checkout}>
               Proceed to Checkout
             </button>
             <small>Secure checkout • 30-day returns</small>

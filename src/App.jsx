@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 
 import Announcement from "./components/Announcement";
 import Header from "./components/Header";
@@ -14,6 +14,9 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Blogs from "./pages/Blogs";
 import BlogDetails from "./pages/BlogDetails";
+import Signup from "./pages/Signup";
+import Login from "./pages/Login";
+import ThankYou from "./pages/ThankYou";
 
 export default function App() {
   const [cart, setCart] = useState(() => {
@@ -58,29 +61,28 @@ export default function App() {
     setCart(prev => prev.filter(item => item.id !== id));
   };
 
+  const clearCart = () => setCart([]);
+
   const cartCount = cart.reduce((sum, item) => sum + item.qty, 0);
 
   return (
     <>
-      <Announcement />
-      <Header cartCount={cartCount} />
-
-      <main>
-        <Routes>
-          <Route path="/" element={<Home addToCart={addToCart} />} />
-          <Route path="/shop" element={<Shop addToCart={addToCart} />} />
-          <Route path="/products" element={<Products addToCart={addToCart} />} />
-          <Route path="/product/:id" element={<ProductDetails addToCart={addToCart} />} />
-          <Route path="/cart" element={<Cart cart={cart} updateQty={updateQty} removeFromCart={removeFromCart} />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/blogs" element={<Blogs />} />
-          <Route path="/blog/:id" element={<BlogDetails />} />
-          <Route path="*" element={<Home addToCart={addToCart} />} />
-        </Routes>
-      </main>
-
-      <Footer />
+      <Routes>
+        <Route path="/" element={<Navigate to="/home" replace />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/thank-you" element={<ThankYou />} />
+        <Route path="/home" element={<><Announcement /><Header cartCount={cartCount} /><main><Home addToCart={addToCart} /></main><Footer /></>} />
+        <Route path="/shop" element={<><Announcement /><Header cartCount={cartCount} /><main><Shop addToCart={addToCart} /></main><Footer /></>} />
+        <Route path="/products" element={<><Announcement /><Header cartCount={cartCount} /><main><Products addToCart={addToCart} /></main><Footer /></>} />
+        <Route path="/product/:id" element={<><Announcement /><Header cartCount={cartCount} /><main><ProductDetails addToCart={addToCart} /></main><Footer /></>} />
+        <Route path="/cart" element={<><Announcement /><Header cartCount={cartCount} /><main><Cart cart={cart} updateQty={updateQty} removeFromCart={removeFromCart} clearCart={clearCart} /></main><Footer /></>} />
+        <Route path="/about" element={<><Announcement /><Header cartCount={cartCount} /><main><About /></main><Footer /></>} />
+        <Route path="/contact" element={<><Announcement /><Header cartCount={cartCount} /><main><Contact /></main><Footer /></>} />
+        <Route path="/blogs" element={<><Announcement /><Header cartCount={cartCount} /><main><Blogs /></main><Footer /></>} />
+        <Route path="/blog/:id" element={<><Announcement /><Header cartCount={cartCount} /><main><BlogDetails /></main><Footer /></>} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
     </>
   );
 }

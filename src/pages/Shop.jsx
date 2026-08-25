@@ -1,12 +1,22 @@
-import React, { useMemo, useState } from "react";
-import { products } from "../data/products";
+import React, { useEffect, useMemo, useState } from "react";
+import { fetchProducts } from "../api";
 import ProductCard from "../components/ProductCard";
 import PageHero from "../components/PageHero";
 
 export default function Shop({ addToCart }) {
+  const [products, setProducts] = useState([]);
+  const [productsLoading, setProductsLoading] = useState(true);
+  const [productsError, setProductsError] = useState("");
   const [category, setCategory] = useState("All");
   const [sort, setSort] = useState("featured");
   const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    fetchProducts()
+      .then(setProducts)
+      .catch(error => setProductsError(error.message || "Unable to load products."))
+      .finally(() => setProductsLoading(false));
+  }, []);
 
   const categories = ["All", ...new Set(products.map(p => p.category))];
 
@@ -21,7 +31,7 @@ export default function Shop({ addToCart }) {
     if (sort === "rating") arr.sort((a,b) => b.rating-a.rating);
 
     return arr;
-  }, [category, sort, search]);
+  }, [products, category, sort, search]);
 
   return (
     <>
@@ -60,11 +70,14 @@ export default function Shop({ addToCart }) {
           </div>
         </div>
 
-        <p className="results">{shown.length} products</p>
-
-        <div className="product-grid">
-          {shown.map(p => <ProductCard key={p.id} product={p} addToCart={addToCart}/>)}
-        </div>
+        {productsLoading && <p className="results">Loading our collection...</p>}
+        {productsError && <p className="results">We could not load the collection. {productsError}</p>}
+        {!productsLoading && !productsError && <>
+          <p className="results">{shown.length} products</p>
+          <div className="product-grid">
+            {shown.map(p => <ProductCard key={p.id} product={p} addToCart={addToCart}/>)}
+          </div>
+        </>}
       </section>
     </>
   );

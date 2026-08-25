@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { products } from "../data/products";
+import Reviews from "../components/Reviews";
 
 const money = (n) => `$${n.toFixed(2)}`;
 
@@ -12,7 +13,8 @@ export default function ProductDetails({ addToCart }) {
   if (!product) return <div className="empty section container"><h1>404</h1><h2>Product not found</h2><Link className="btn dark" to="/shop">Back to Shop</Link></div>;
 
   return (
-    <section className="section container product-detail">
+    <>
+      <section className="section container product-detail">
       <div className="detail-image"><img src={product.image} alt={product.name}/></div>
 
       <div className="detail-copy">
@@ -47,6 +49,8 @@ export default function ProductDetails({ addToCart }) {
 
         <Link className="back-link" to="/shop">← Continue shopping</Link>
       </div>
-    </section>
+      </section>
+      <Reviews product={product} />
+    </>
   );
 }
