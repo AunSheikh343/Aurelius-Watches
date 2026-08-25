@@ -4,6 +4,10 @@ import { Link } from "react-router-dom";
 const money = (n) => `$${n.toFixed(2)}`;
 
 export default function ProductCard({ product, addToCart }) {
+  const addProduct = () => {
+    addToCart(product);
+  };
+
   return (
     <article className="product-card">
       <Link to={`/product/${product.id}`} className="product-image">
@@ -24,7 +28,7 @@ export default function ProductCard({ product, addToCart }) {
           <strong>{money(product.price)}</strong>
           <del>{money(product.oldPrice)}</del>
         </div>
-        <button onClick={() => addToCart(product)}>Add to cart</button>
+        <button type="button" aria-label={`Add ${product.name} to cart`} onClick={addProduct}>Add to cart</button>
       </div>
     </article>
   );

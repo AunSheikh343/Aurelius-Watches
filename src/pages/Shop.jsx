@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { fetchProducts } from "../api";
 import ProductCard from "../components/ProductCard";
 import PageHero from "../components/PageHero";
@@ -10,6 +10,11 @@ export default function Shop({ addToCart }) {
   const [category, setCategory] = useState("All");
   const [sort, setSort] = useState("featured");
   const [search, setSearch] = useState("");
+  const searchInput = useRef(null);
+
+  useEffect(() => {
+    if (window.location.hash === "#search") searchInput.current?.focus();
+  }, []);
 
   useEffect(() => {
     fetchProducts()
@@ -57,6 +62,8 @@ export default function Shop({ addToCart }) {
 
           <div className="toolbar-right">
             <input
+              id="search"
+              ref={searchInput}
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder="Search watches..."

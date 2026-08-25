@@ -51,9 +51,9 @@ export default function Cart({ cart, updateQty, removeFromCart, clearCart }) {
                   <strong>{money(item.price)}</strong>
 
                   <div className="qty">
-                    <button onClick={() => updateQty(item.id, item.qty-1)} disabled={item.qty === 1}>−</button>
+                    <button type="button" aria-label={`Decrease quantity of ${item.name}`} onClick={() => updateQty(item.id, item.qty-1)} disabled={item.qty === 1}>−</button>
                     <span>{item.qty}</span>
-                    <button onClick={() => updateQty(item.id, item.qty+1)}>+</button>
+                    <button type="button" aria-label={`Increase quantity of ${item.name}`} onClick={() => updateQty(item.id, item.qty+1)}>+</button>
                   </div>
                 </div>
 

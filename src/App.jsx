@@ -27,6 +27,7 @@ export default function App() {
       return [];
     }
   });
+  const [cartNotice, setCartNotice] = useState("");
 
   useEffect(() => {
     localStorage.setItem("aurelius-cart", JSON.stringify(cart));
@@ -46,7 +47,14 @@ export default function App() {
 
       return [...prev, { ...product, qty }];
     });
+    setCartNotice(`${product.name} added to your cart.`);
   };
+
+  useEffect(() => {
+    if (!cartNotice) return undefined;
+    const timer = window.setTimeout(() => setCartNotice(""), 2600);
+    return () => window.clearTimeout(timer);
+  }, [cartNotice]);
 
   const updateQty = (id, qty) => {
     setCart(prev =>
@@ -68,6 +76,7 @@ export default function App() {
 
   return (
     <>
+      <div className={cartNotice ? "cart-notice is-visible" : "cart-notice"} role="status" aria-live="polite">{cartNotice}</div>
       <Routes>
         <Route path="/" element={<Navigate to="/home" replace />} />
         <Route path="/signup" element={<Signup />} />

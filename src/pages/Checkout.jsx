@@ -44,8 +44,16 @@ export default function Checkout({ cart, clearCart }) {
     const form = new FormData(event.currentTarget);
     const cardNumber = String(form.get("cardNumber")).replace(/\s/g, "");
 
-    if (!/^\d{16}$/.test(cardNumber)) {
-      setError("Enter a valid 16-digit Visa card number.");
+    const expiry = String(form.get("expiry")).trim();
+    const cvv = String(form.get("cvv")).trim();
+
+    if (!/^4\d{15}$/.test(cardNumber)) {
+      setError("Enter a valid 16-digit Visa card number starting with 4.");
+      return;
+    }
+
+    if (!/^(0[1-9]|1[0-2])\s*\/\s*\d{2}$/.test(expiry) || !/^\d{3,4}$/.test(cvv)) {
+      setError("Check the expiry date and security code.");
       return;
     }
 
@@ -105,7 +113,7 @@ export default function Checkout({ cart, clearCart }) {
             </div>
             {error && <p className="form-error" role="alert">{error}</p>}
             <button className="btn dark wide checkout-submit" type="submit">Place order · {money(total)}</button>
-            <p className="checkout-note">Your payment details are encrypted and never stored by Aurelius.</p>
+            <p className="checkout-note">Demo checkout only. No payment is processed or stored.</p>
           </div>
         </form>
 

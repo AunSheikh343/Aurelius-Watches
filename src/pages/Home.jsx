@@ -105,8 +105,8 @@ export default function Home({ addToCart }) {
         <div className="slider-heading">
           <SectionHeading eyebrow="CURATED FOR YOU" title="Featured Timepieces" link="/shop"/>
           <div className="slider-controls" aria-label="Featured watches controls">
-            <button type="button" aria-label="Previous featured watch" onClick={() => moveSlide(-1)}>←</button>
-            <button type="button" aria-label="Next featured watch" onClick={() => moveSlide(1)}>→</button>
+            <button type="button" aria-label="Previous featured watch" disabled={!featured.length} onClick={() => moveSlide(-1)}>←</button>
+            <button type="button" aria-label="Next featured watch" disabled={!featured.length} onClick={() => moveSlide(1)}>→</button>
           </div>
         </div>
         <div className="featured-slider">
