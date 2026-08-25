@@ -32,6 +32,7 @@ export default function Header({ cartCount }) {
           <NavLink to="/about">About</NavLink>
           <NavLink to="/blogs">Blogs</NavLink>
           <NavLink to="/contact">Contact</NavLink>
+          <NavLink to="/track-order">Track Order</NavLink>
         </nav>
 
         <div className="nav-actions">

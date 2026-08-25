@@ -18,6 +18,7 @@ import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import ThankYou from "./pages/ThankYou";
 import Checkout from "./pages/Checkout";
+import TrackOrder from "./pages/TrackOrder";
 
 export default function App() {
   const [cart, setCart] = useState(() => {
@@ -83,6 +84,7 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/thank-you" element={<ThankYou />} />
         <Route path="/checkout" element={<><Announcement /><Header cartCount={cartCount} /><main><Checkout cart={cart} clearCart={clearCart} /></main><Footer /></>} />
+        <Route path="/track-order" element={<><Announcement /><Header cartCount={cartCount} /><main><TrackOrder /></main><Footer /></>} />
         <Route path="/home" element={<><Announcement /><Header cartCount={cartCount} /><main><Home addToCart={addToCart} /></main><Footer /></>} />
         <Route path="/shop" element={<><Announcement /><Header cartCount={cartCount} /><main><Shop addToCart={addToCart} /></main><Footer /></>} />
         <Route path="/products" element={<><Announcement /><Header cartCount={cartCount} /><main><Products addToCart={addToCart} /></main><Footer /></>} />

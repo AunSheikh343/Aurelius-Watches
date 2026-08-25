@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_URL } from "../api";
 
 const money = value => `$${value.toFixed(2)}`;
 
@@ -38,7 +39,7 @@ export default function Checkout({ cart, clearCart }) {
     setPromoMessage(`${selected.label} applied.`);
   };
 
-  const submitOrder = event => {
+  const submitOrder = async event => {
     event.preventDefault();
     setError("");
     const form = new FormData(event.currentTarget);
@@ -57,14 +58,36 @@ export default function Checkout({ cart, clearCart }) {
       return;
     }
 
-    const order = {
-      number: `AW-${Date.now().toString().slice(-8)}`,
-      itemCount: cart.reduce((sum, item) => sum + item.qty, 0),
-      total,
-    };
+    const token = localStorage.getItem("aurelius-token");
+    const user = JSON.parse(localStorage.getItem("aurelius-user") || "null");
+    if (!token || !user) {
+      setError("Please log in before placing an order so you can track it later.");
+      return;
+    }
 
-    clearCart();
-    navigate("/thank-you", { state: { order } });
+    try {
+      const response = await fetch(`${API_URL}/api/orders`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({
+          user: user.id,
+          customerName: `${form.get("firstName")} ${form.get("lastName")}`,
+          products: cart.map(item => ({ productId: item.id, name: item.name, quantity: item.qty, price: item.price })),
+          totalAmount: total,
+          shippingAddress: { address: form.get("address"), city: form.get("city"), postalCode: form.get("postalCode"), country: "Pakistan" },
+        }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || "Unable to place your order.");
+
+      clearCart();
+      navigate(`/track-order?orderId=${encodeURIComponent(data.order.orderId)}`);
+      return;
+    } catch (requestError) {
+      setError(requestError.message || "Unable to place your order.");
+      return;
+    }
+
   };
 
   if (cart.length === 0) {
