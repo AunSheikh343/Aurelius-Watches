@@ -26,6 +26,17 @@ app.get("/", (req, res) => {
   res.send("Backend is working!");
 });
 
+app.use("/api/auth", async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch {
+    res.status(503).json({
+      success: false,
+      message: "Authentication service is temporarily unavailable.",
+    });
+  }
+});
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 
@@ -53,4 +64,8 @@ const startServer = async () => {
   }
 };
 
-startServer();
+if (require.main === module) {
+  startServer();
+}
+
+module.exports = app;
