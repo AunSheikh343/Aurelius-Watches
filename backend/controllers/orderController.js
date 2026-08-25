@@ -45,7 +45,7 @@ const trackOrder = async (req, res) => {
   const orderId = String(req.params.orderId || "").trim();
   if (!orderIdPattern.test(orderId)) return res.status(400).json({ success: false, message: "Please enter a valid Order ID." });
 
-  const order = await Order.findOne({ orderId: orderId.toUpperCase(), user: req.user.id }).select("-__v -products").lean();
+  const order = await Order.findOne({ orderId: orderId.toUpperCase() }).select("-__v -products -user").lean();
   if (!order) return res.status(404).json({ success: false, message: "Order not found" });
 
   res.json({ success: true, order: formatOrder(order) });

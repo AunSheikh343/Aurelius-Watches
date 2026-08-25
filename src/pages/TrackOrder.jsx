@@ -22,22 +22,13 @@ export default function TrackOrder() {
       return;
     }
 
-    const token = localStorage.getItem("aurelius-token");
-    if (!token) {
-      setOrder(null);
-      setMessage("Please log in to view your order tracking details.");
-      return;
-    }
-
     setLoading(true);
     setMessage("");
     setOrder(null);
     setSearchParams({ orderId: cleanId });
 
     try {
-      const response = await fetch(`${API_URL}/api/orders/track/${encodeURIComponent(cleanId)}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await fetch(`${API_URL}/api/orders/track/${encodeURIComponent(cleanId)}`);
       const data = await readApiResponse(response, response.status === 404 ? "Order not found. Please check your Order ID and try again." : "Unable to load this order.");
       setOrder(data.order);
     } catch (error) {
