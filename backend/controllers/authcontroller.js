@@ -111,6 +111,14 @@ const loginUser = async (req, res) => {
       });
     }
 
+    if (!process.env.JWT_SECRET) {
+      console.error("Login error: JWT_SECRET is not configured.");
+      return res.status(503).json({
+        success: false,
+        message: "Authentication service is not configured.",
+      });
+    }
+
     const token = jwt.sign(
       { id: user._id, role: user.role },
       process.env.JWT_SECRET,

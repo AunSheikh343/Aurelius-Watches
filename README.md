@@ -47,6 +47,19 @@ npm install
 npm run dev
 ```
 
+## Deploy the API
+
+Set these environment variables in the hosting provider before deploying:
+
+```text
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_long_random_secret
+JWT_EXPIRES_IN=7d
+CLIENT_URL=https://your-frontend-domain.example
+```
+
+For Vercel, add them under Project Settings > Environment Variables and redeploy after saving. Never commit `.env` files or real credentials.
+
 ## Routes
 
 - `/` — Home
